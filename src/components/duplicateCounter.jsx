@@ -16,14 +16,42 @@ class DupCounter extends Component {
     this.setState({ counters: newCounterObj });
   };
 
+  handleReset = () => {
+    const reset = this.state.counters.map(c => {
+      c.value = 0;
+      return c;
+    });
+    this.setState({ counters: reset });
+  };
+
+  handleIncrement = counter => {
+    const copyState = [...this.state.counters];
+    const index = copyState.indexOf(counter);
+    copyState[index] = {...counter}
+    copyState[index].value++;
+    this.setState({counters: copyState})
+  };
+
   render() {
-    return this.state.counters.map(counterObj => (
-      <Counter
-        key={counterObj.id}
-        counter={counterObj}
-        onDelete={this.handleDelete}
-      />
-    ));
+    return (
+      <div>
+        <button
+          className="btn btn-sm m-2 btn-primary"
+          onClick={this.handleReset}
+        >
+          Reset
+        </button>
+        {this.state.counters.map(counterObj => (
+          <Counter
+            key={counterObj.id}
+            counter={counterObj}
+            onIncrement={this.handleIncrement}
+            onDelete={this.handleDelete}
+          />
+        ))}
+        ;
+      </div>
+    );
   }
 }
 
